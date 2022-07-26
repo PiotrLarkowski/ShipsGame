@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import statki.ship.ShipDirection;
 
 import java.util.List;
 
@@ -19,12 +20,15 @@ public class ShipShipsGame {
     private int shipId;
     private int shipSize;
     boolean shipDestroyed;
+
+    Enum<ShipDirection> shipDirectionEnum;
     @ManyToOne
     private PointShipsGame localization;
 
-    public ShipShipsGame(int shipSize, PointShipsGame localization, boolean shipDestroyed) {
+    public ShipShipsGame(int shipSize, PointShipsGame localization ,boolean shipDestroyed, Enum<ShipDirection> shipDirectionEnum) {
         this.shipSize = shipSize;
-        this.localization = localization;
         this.shipDestroyed = shipDestroyed;
+        this.shipDirectionEnum = shipDirectionEnum;
+        this.localization = localization;
     }
 }

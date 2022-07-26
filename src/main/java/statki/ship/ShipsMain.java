@@ -26,6 +26,9 @@ public class ShipsMain {
             switch (choice) {
                 case "1": {
                     setNewPlayboard();
+                    messagesPrinter.printSingleLine("Tworzenie drugiego gracza");
+                    setNewPlayboard();
+                    messagesPrinter.printSingleLine("Rozpoczynam rozgrywke!!!");
                     beginOfTheGame();
                     break;
                 }
@@ -73,7 +76,7 @@ public class ShipsMain {
         UserShipsDao userShipsDao = new UserShipsDao(sessionFactory);
         userShipsDao.save(userShipsGame);
         sessionFactory.close();
-        //TODO tworzenie nowego rekordu typu User w bazie danych
+
     }
 
     private void beginOfTheGame() {

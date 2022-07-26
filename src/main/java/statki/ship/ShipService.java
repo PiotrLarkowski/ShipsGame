@@ -1,6 +1,11 @@
 package statki.ship;
 
+import org.hibernate.SessionFactory;
+import statki.Hibernate.HibernateFactory;
+import statki.dao.PointShipsDao;
+import statki.dao.ShipShipsDao;
 import statki.model.PointShipsGame;
+import statki.model.ShipShipsGame;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -281,7 +286,26 @@ public class ShipService {
                 point.setY(point.getY() - 1);
             }
             busyPointsOnBoard.add(new PointShipsGame(point.getX(), point.getY()));
+            addPointToDataBase(new PointShipsGame(point.getX(), point.getY()));
         }
+
+        addShipToDataBase(shipSize, point, shipDirectionEnum);
+
+    }
+
+    private void addShipToDataBase(int shipSize, PointShipsGame point, ShipDirection shipDirectionEnum){
+        ShipShipsGame shipShipsGame = new ShipShipsGame(shipSize, point, true, shipDirectionEnum);
+        SessionFactory sessionFactory = new HibernateFactory().getSessionFactory();
+        ShipShipsDao shipShipsDao = new ShipShipsDao(sessionFactory);
+        shipShipsDao.save(shipShipsGame);
+        sessionFactory.close();
+    }
+
+    private void addPointToDataBase(PointShipsGame pointShipsGame){
+        SessionFactory sessionFactory = new HibernateFactory().getSessionFactory();
+        PointShipsDao pointShipsDao = new PointShipsDao(sessionFactory);
+        pointShipsDao.save(pointShipsGame);
+        sessionFactory.close();
     }
 
 }
