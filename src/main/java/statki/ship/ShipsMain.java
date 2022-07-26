@@ -1,17 +1,22 @@
 package statki.ship;
 
-import org.hibernate.SessionFactory;
-import statki.Hibernate.HibernateFactory;
-import statki.dao.UserShipsDao;
+import statki.model.BoardShipsGame;
+import statki.model.PointShipsGame;
 import statki.model.UserShipsGame;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ShipsMain {
 
     private MessagesPrinter messagesPrinter = new MessagesPrinter();
     private Scanner scanner = new Scanner(System.in);
-    private String userName;
+
+    public List<PointShipsGame> userOneBusyPointsOnBoard = new ArrayList<>();
+    public List<PointShipsGame> userTwoBusyPointsOnBoard = new ArrayList<>();
+    public UserShipsGame userOneName;
+    public UserShipsGame userTwoName;
     private boolean mainLoop = true;
     private String choice = "";
     private String choiceUser = "";
@@ -25,9 +30,19 @@ public class ShipsMain {
             choice = scanner.next();
             switch (choice) {
                 case "1": {
+                    BoardShipsGame boardShipsGame = new BoardShipsGame();
+
                     setNewPlayboard();
+
+                    boardShipsGame.setPlayBoardUserOne(userOneBusyPointsOnBoard);
+                    boardShipsGame.setUserOne(userOneName);
+
                     messagesPrinter.printSingleLine("Tworzenie drugiego gracza");
                     setNewPlayboard();
+
+                    boardShipsGame.setPlayBoardUserTwo(userTwoBusyPointsOnBoard);
+                    boardShipsGame.setUserTwo(userTwoName);
+
                     messagesPrinter.printSingleLine("Rozpoczynam rozgrywke!!!");
                     beginOfTheGame();
                     break;
@@ -59,25 +74,15 @@ public class ShipsMain {
             //TODO wyswietlanie listy uzytkownikow z bazy danych
             //TODO jezeli lista uzytkownikow z bazy danych będzie różna od 0 możliwość wyboru gry przez uzytkownika
         } else {
-            messagesPrinter.creatingNewUser();
-            creatingNewUser();
-            messagesPrinter.placingTheShips();
             ShipService shipService = new ShipService();
+            messagesPrinter.creatingNewUser();
+            shipService.creatingNewUser();
+            messagesPrinter.placingTheShips();
             shipService.creatingShip();
-            //TODO tworzenie nowego statku
         }
     }
 
-    private void creatingNewUser() {
-        userName = scanner.next();
-        UserShipsGame userShipsGame = new UserShipsGame(userName);
-        userShipsGame = new UserShipsGame(userName);
-        SessionFactory sessionFactory = new HibernateFactory().getSessionFactory();
-        UserShipsDao userShipsDao = new UserShipsDao(sessionFactory);
-        userShipsDao.save(userShipsGame);
-        sessionFactory.close();
 
-    }
 
     private void beginOfTheGame() {
         //TODO stworzenie rozgrywki

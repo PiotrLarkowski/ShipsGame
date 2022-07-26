@@ -1,17 +1,14 @@
 package statki.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Entity//to wskazuje, że klasa bedzie encją
 @Getter
 @Setter
-@NoArgsConstructor//po co jest NoArgsConstructor? dopytać
+@NoArgsConstructor
 @ToString
 public class BoardShipsGame {
     @Id

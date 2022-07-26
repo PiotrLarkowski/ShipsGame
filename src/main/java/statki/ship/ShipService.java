@@ -4,16 +4,17 @@ import org.hibernate.SessionFactory;
 import statki.Hibernate.HibernateFactory;
 import statki.dao.PointShipsDao;
 import statki.dao.ShipShipsDao;
+import statki.dao.UserShipsDao;
 import statki.model.PointShipsGame;
 import statki.model.ShipShipsGame;
+import statki.model.UserShipsGame;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class ShipService {
 
+    ShipsMain shipsMain = new ShipsMain();
     private ShipDirection shipDirectionEnum;
     private boolean isShipPositionOk = false;
     private int choiceShipSize = 1;
@@ -27,7 +28,6 @@ public class ShipService {
     private int userPointY;
     private int userPointX;
     private boolean endLoopCreatingShip;
-    public List<PointShipsGame> busyPointsOnBoard = new ArrayList<>();
     private MessagesPrinter messagesPrinter = new MessagesPrinter();
     private Scanner scanner = new Scanner(System.in);
 
@@ -50,6 +50,8 @@ public class ShipService {
                 }
             } while (endOfPlacesTheShips == false);
         } while (endOfPlacesTheShips == false);
+
+
     }
 
     private boolean checkAvilabilityShips() { // To samo co u gory
@@ -138,14 +140,14 @@ public class ShipService {
                 //Wartosc X okresla litery od A - J (wiersze) a wartosc Y okresla cyfry od 1 - 10 (kolumny)
                 if ((point.getX() - (shipSize - 1)) > 0) 
                 {
-                    for (int i = 0; i < busyPointsOnBoard.size(); i++) {
+                    for (int i = 0; i < shipsMain.userOneBusyPointsOnBoard.size(); i++) {
                         if(isShipPositionOk == false)
                         {
                             break;
                         }
                         for (int j = 0; j < shipSize; j++) {
                             PointShipsGame pointShipsGame = new PointShipsGame(point.getX() - j, point.getY());
-                            if (pointShipsGame.equals(busyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
+                            if (pointShipsGame.equals(shipsMain.userOneBusyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
                                 isShipPositionOk = false;
                                 messagesPrinter.printSingleLine("W tym miejscu nie moze stac kolejny statek");
                                 break;
@@ -164,14 +166,14 @@ public class ShipService {
                 //Wartosc X okresla litery od A - J (wiersze) a wartosc Y okresla cyfry od 1 - 10 (kolumny)
                 if ((point.getY() + (shipSize - 1)) > 0) // int
                 {
-                    for (int i = 0; i < busyPointsOnBoard.size(); i++) {
+                    for (int i = 0; i < shipsMain.userOneBusyPointsOnBoard.size(); i++) {
                         if(isShipPositionOk == false)
                         {
                             break;
                         }
                         for (int j = 0; j < shipSize; j++) {
                             PointShipsGame pointShipsGame = new PointShipsGame(point.getX(), point.getY() + j);
-                            if (pointShipsGame.equals(busyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
+                            if (pointShipsGame.equals(shipsMain.userOneBusyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
                                 isShipPositionOk = false;
                                 messagesPrinter.printSingleLine("W tym miejscu nie może stać kolejny statek");
                                 break;
@@ -190,14 +192,14 @@ public class ShipService {
                 //Wartosc X okresla litery od A - J (wiersze) a wartosc Y okresla cyfry od 1 - 10 (kolumny)
                 if ((point.getX() + (shipSize - 1)) > 0) // int
                 {
-                    for (int i = 0; i < busyPointsOnBoard.size(); i++) {
+                    for (int i = 0; i < shipsMain.userOneBusyPointsOnBoard.size(); i++) {
                         if(isShipPositionOk == false)
                         {
                             break;
                         }
                         for (int j = 0; j < shipSize; j++) {
                             PointShipsGame pointShipsGame = new PointShipsGame(point.getX() + j, point.getY());
-                            if (pointShipsGame.equals(busyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
+                            if (pointShipsGame.equals(shipsMain.userOneBusyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
                                 isShipPositionOk = false;
                                 messagesPrinter.printSingleLine("W tym miejscu nie może stać kolejny statek");
                                 break;
@@ -215,14 +217,14 @@ public class ShipService {
             case isLeft: {//Stawiamy statek w lewo
                 if ((point.getY() - (shipSize - 1)) > 0) // int
                 {
-                    for (int i = 0; i < busyPointsOnBoard.size(); i++) {
+                    for (int i = 0; i < shipsMain.userOneBusyPointsOnBoard.size(); i++) {
                         if(isShipPositionOk == false)
                         {
                             break;
                         }
                         for (int j = 0; j < shipSize; j++) {
                             PointShipsGame pointShipsGame = new PointShipsGame(point.getX(), point.getY() - j);
-                            if (pointShipsGame.equals(busyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
+                            if (pointShipsGame.equals(shipsMain.userOneBusyPointsOnBoard.get(i))) { //Czy punkt jest juz zajety
                                 isShipPositionOk = false;
                                 messagesPrinter.printSingleLine("W tym miejscu nie może stać kolejny statek");
                                 break;
@@ -249,7 +251,7 @@ public class ShipService {
     private void placesShipOnPointsList(int shipSize, PointShipsGame point, ShipDirection shipDirectionEnum) {
         switch (shipSize) {
             case 1: {
-                busyPointsOnBoard.add(point); // Dodajemy punkt do listy zajetych punktow
+                shipsMain.userOneBusyPointsOnBoard.add(point); // Dodajemy punkt do listy zajetych punktow
                 oneSizeShip--;
                 break;
             }
@@ -270,11 +272,11 @@ public class ShipService {
             }
         }
 //      TODO tworzenie obiektu statek
-        messagesPrinter.printSingleBoard(busyPointsOnBoard);
+        messagesPrinter.printSingleBoard(shipsMain.userOneBusyPointsOnBoard);
     }
 
     private void settingThePointWhichTheShipIsOccupaing(int shipSize, PointShipsGame point, ShipDirection shipDirectionEnum) {
-        busyPointsOnBoard.add(new PointShipsGame(point.getX(), point.getY()));
+        shipsMain.userOneBusyPointsOnBoard.add(new PointShipsGame(point.getX(), point.getY()));
         for (int i = 0; i < shipSize-1; i++) {
             if (shipDirectionEnum == ShipDirection.isTop) {
                 point.setX(point.getX() - 1);
@@ -285,12 +287,10 @@ public class ShipService {
             } else {
                 point.setY(point.getY() - 1);
             }
-            busyPointsOnBoard.add(new PointShipsGame(point.getX(), point.getY()));
+            shipsMain.userOneBusyPointsOnBoard.add(new PointShipsGame(point.getX(), point.getY()));
             addPointToDataBase(new PointShipsGame(point.getX(), point.getY()));
         }
-
         addShipToDataBase(shipSize, point, shipDirectionEnum);
-
     }
 
     private void addShipToDataBase(int shipSize, PointShipsGame point, ShipDirection shipDirectionEnum){
@@ -308,4 +308,12 @@ public class ShipService {
         sessionFactory.close();
     }
 
+    public void creatingNewUser() {
+        String name = scanner.next();
+        shipsMain.userOneName = new UserShipsGame(name);
+        SessionFactory sessionFactory = new HibernateFactory().getSessionFactory();
+        UserShipsDao userShipsDao = new UserShipsDao(sessionFactory);
+        userShipsDao.save(shipsMain.userOneName);
+        sessionFactory.close();
+    }
 }
