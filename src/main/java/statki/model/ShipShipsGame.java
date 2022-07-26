@@ -31,4 +31,6 @@ public class ShipShipsGame {
         this.shipDirectionEnum = shipDirectionEnum;
         this.localization = localization;
     }
+
+    //komentarz
 }
