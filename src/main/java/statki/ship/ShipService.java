@@ -2,9 +2,11 @@ package statki.ship;
 
 import org.hibernate.SessionFactory;
 import statki.Hibernate.HibernateFactory;
+import statki.dao.BoardShipsDao;
 import statki.dao.PointShipsDao;
 import statki.dao.ShipShipsDao;
 import statki.dao.UserShipsDao;
+import statki.model.BoardShipsGame;
 import statki.model.PointShipsGame;
 import statki.model.ShipShipsGame;
 import statki.model.UserShipsGame;
@@ -18,10 +20,10 @@ public class ShipService {
     private ShipDirection shipDirectionEnum;
     private boolean isShipPositionOk = false;
     private int choiceShipSize = 1;
-    protected int fourSizeShip = 1;
-    protected int threeSizeShip = 2;
-    protected int twoSizeShip = 3;
-    protected int oneSizeShip = 4;
+    protected int fourSizeShip = 0;
+    protected int threeSizeShip = 0;
+    protected int twoSizeShip = 0;
+    protected int oneSizeShip = 1;
     public int shipDirection;
     private boolean endOfPlacesTheShips = false;
     private PointShipsGame firstPointShip;
@@ -251,7 +253,7 @@ public class ShipService {
     private void placesShipOnPointsList(int shipSize, PointShipsGame point, ShipDirection shipDirectionEnum) {
         switch (shipSize) {
             case 1: {
-                shipsMain.userOneBusyPointsOnBoard.add(point); // Dodajemy punkt do listy zajetych punktow
+                settingThePointWhichTheShipIsOccupaing(shipSize, point, shipDirectionEnum);
                 oneSizeShip--;
                 break;
             }
@@ -277,6 +279,7 @@ public class ShipService {
 
     private void settingThePointWhichTheShipIsOccupaing(int shipSize, PointShipsGame point, ShipDirection shipDirectionEnum) {
         shipsMain.userOneBusyPointsOnBoard.add(new PointShipsGame(point.getX(), point.getY()));
+        addPointToDataBase(new PointShipsGame(point.getX(), point.getY()));
         for (int i = 0; i < shipSize-1; i++) {
             if (shipDirectionEnum == ShipDirection.isTop) {
                 point.setX(point.getX() - 1);
@@ -288,8 +291,9 @@ public class ShipService {
                 point.setY(point.getY() - 1);
             }
             shipsMain.userOneBusyPointsOnBoard.add(new PointShipsGame(point.getX(), point.getY()));
-            addPointToDataBase(new PointShipsGame(point.getX(), point.getY()));
+           addPointToDataBase(new PointShipsGame(point.getX(), point.getY()));
         }
+
         addShipToDataBase(shipSize, point, shipDirectionEnum);
     }
 
@@ -314,6 +318,13 @@ public class ShipService {
         SessionFactory sessionFactory = new HibernateFactory().getSessionFactory();
         UserShipsDao userShipsDao = new UserShipsDao(sessionFactory);
         userShipsDao.save(shipsMain.userOneName);
+        sessionFactory.close();
+    }
+
+    public  void  addBoardShipsGameToDataBase(BoardShipsGame boardShipsGame){
+        SessionFactory sessionFactory = new HibernateFactory().getSessionFactory();
+        BoardShipsDao boardShipsDao = new BoardShipsDao(sessionFactory);
+        boardShipsDao.save(boardShipsGame);
         sessionFactory.close();
     }
 }

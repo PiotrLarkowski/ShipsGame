@@ -21,6 +21,8 @@ public class ShipsMain {
     private String choice = "";
     private String choiceUser = "";
 
+
+
     public void start() {
 
         messagesPrinter.printStartingMenuLabel();
@@ -32,16 +34,18 @@ public class ShipsMain {
                 case "1": {
                     BoardShipsGame boardShipsGame = new BoardShipsGame();
 
-                    setNewPlayboard();
+                  setNewPlayboard();
 
                     boardShipsGame.setPlayBoardUserOne(userOneBusyPointsOnBoard);
                     boardShipsGame.setUserOne(userOneName);
 
                     messagesPrinter.printSingleLine("Tworzenie drugiego gracza");
-                    setNewPlayboard();
+                   setNewPlayboard();
 
                     boardShipsGame.setPlayBoardUserTwo(userTwoBusyPointsOnBoard);
                     boardShipsGame.setUserTwo(userTwoName);
+                    ShipService shipService = new ShipService();
+                    shipService.addBoardShipsGameToDataBase(boardShipsGame);
 
                     messagesPrinter.printSingleLine("Rozpoczynam rozgrywke!!!");
                     beginOfTheGame();

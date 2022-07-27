@@ -25,12 +25,16 @@ public class ShipShipsGame {
     @ManyToOne
     private PointShipsGame localization;
 
-    public ShipShipsGame(int shipSize, PointShipsGame localization ,boolean shipDestroyed, Enum<ShipDirection> shipDirectionEnum) {
+    public ShipShipsGame(int shipSize, PointShipsGame localization ,
+                         boolean shipDestroyed,
+                         Enum<ShipDirection> shipDirectionEnum) {
         this.shipSize = shipSize;
         this.shipDestroyed = shipDestroyed;
         this.shipDirectionEnum = shipDirectionEnum;
         this.localization = localization;
     }
 
-    //komentarz
+
+
+
 }
